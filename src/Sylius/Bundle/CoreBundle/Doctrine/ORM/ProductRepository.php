@@ -76,7 +76,7 @@ class ProductRepository extends BaseProductRepository implements ProductReposito
             ->andWhere('productTaxon.taxon = :taxon')
             ->andWhere(':channel MEMBER OF o.channels')
             ->andWhere('o.enabled = true')
-            ->addGroupBy('o.id')
+            ->addGroupBy('o.id', 'translation.id', 'productTaxon.id')
             ->setParameter('locale', $locale)
             ->setParameter('taxon', $taxon)
             ->setParameter('channel', $channel)
@@ -88,6 +88,7 @@ class ProductRepository extends BaseProductRepository implements ProductReposito
                 ->innerJoin('o.variants', 'variant')
                 ->innerJoin('variant.channelPricings', 'channelPricing')
                 ->andWhere('channelPricing.channelCode = :channelCode')
+                ->addGroupBy('channelPricing.id')
                 ->setParameter('channelCode', $channel->getCode())
             ;
         }
